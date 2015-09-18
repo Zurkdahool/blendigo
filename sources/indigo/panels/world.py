@@ -25,10 +25,18 @@
 # ***** END GPL LICENCE BLOCK *****
 #
 import bl_ui            #@UnresolvedImport
+import bpy
+from bpy.types import WindowManager
+
+from bpy.props import (
+            StringProperty, BoolProperty,
+            EnumProperty,
+            )
 
 from extensions_framework.ui import property_group_renderer
 
 from indigo import IndigoAddon
+
 
 class world_panel(bl_ui.properties_world.WorldButtonsPanel, property_group_renderer):
     COMPAT_ENGINES = {IndigoAddon.BL_IDNAME}
@@ -61,3 +69,12 @@ class indigo_ui_lightlayers(world_panel):
                     property_group = lg
                 )
             row.operator('indigo.lightlayer_remove', text="", icon="ZOOMOUT").lg_index=lg_index
+          
+@IndigoAddon.addon_register_class
+class indigo_ui_atmosphere(world_panel):
+   bl_label = 'Atmosphere'
+
+   display_property_groups = [
+        ( ('scene',), 'indigo_atmosphere' )
+    ]
+         

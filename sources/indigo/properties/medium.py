@@ -65,8 +65,6 @@ class indigo_material_medium_data(declarative_property_group):
     Med_Medium_Basic.controls + \
     [ [  'medium_melanin', 'medium_eumelanin',],
     'medium_haemoglobin',
-    [ 'medium_turbidity',],
-    [ 'medium_posx', 'medium_posy', 'medium_posz', ],
     'sss',
     ] + \
     Med_SSS_Scatter.controls + \
@@ -86,10 +84,6 @@ class indigo_material_medium_data(declarative_property_group):
         'medium_haemoglobin':    { 'medium_type': 'dermis' },
         'medium_melanin':        { 'medium_type': 'epidermis' },
         'medium_eumelanin':        { 'medium_type': 'epidermis' },
-        'medium_turbidity':        { 'medium_type': 'atmosphere' },
-        'medium_posx':        { 'medium_type': 'atmosphere' },
-        'medium_posy':        { 'medium_type': 'atmosphere' },
-        'medium_posz':        { 'medium_type': 'atmosphere' },
         'sss':  { 'medium_type': 'basic' },
         'sss_scatter_type'    :    { 'sss': True },
         'sss_phase_function':    { 'sss': True },
@@ -145,7 +139,6 @@ class indigo_material_medium_data(declarative_property_group):
                 ('basic', 'Basic', 'basic'),
                 ('dermis', 'Dermis', 'dermis'),
                 ('epidermis', 'Epidermis', 'epidermis'),
-              #  ('atmosphere', 'Atmosphere', 'atmosphere'),
             ]
         },
            {
@@ -218,50 +211,6 @@ class indigo_material_medium_data(declarative_property_group):
             'min': 0.0,
             'max': 1.0
         },
-        {
-            'type': 'float',
-            'attr': 'medium_turbidity',
-            'name': 'Turbidity',
-            'description': 'Turbidity',
-            'slider': True,
-            'default': 2.2,
-            'min': 1.0,
-            'max': 10.0
-        },
-        {
-            'type': 'string',
-            'attr': 'center',
-            'name': 'center'
-        },
-        {
-            'type': 'float',
-            'attr': 'medium_posx',
-            'name': 'X:',
-            'description': 'Position X',
-            'default': 0,
-            'min': 0.0,
-            'max': 360.0
-        },
-        {
-            'type': 'float',
-            'attr': 'medium_posy',
-            'name': 'Y:',
-            'description': 'Position Y',
-            'default': 0,
-            'min': 0.0,
-            'max': 360.0
-        },
-        {
-            'type': 'float',
-            'attr': 'medium_posz',
-            'name': 'Z',
-            'description': 'Position Z',
-            'default': 0,
-            'min': 0.0,
-            'max': 360.0
-        },
-
-
     ] + Cha_Medium.properties    + \
         Med_Medium_Basic.properties + \
         Med_SSS_Scatter.properties + \

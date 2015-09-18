@@ -24,9 +24,14 @@
 #
 # ***** END GPL LICENCE BLOCK *****
 #
+
+import bpy 
+
 from extensions_framework import declarative_property_group
 
+import indigo
 from indigo import IndigoAddon
+
 
 @IndigoAddon.addon_register_class
 class indigo_lightlayer_data(declarative_property_group):
@@ -150,3 +155,96 @@ class indigo_lightlayers(declarative_property_group):
                     en[name] = idx
                     idx += 1
         return en
+
+@IndigoAddon.addon_register_class
+class indigo_atmosphere(declarative_property_group):
+    '''
+    Storage class for Indigo Light Layers.
+    '''
+    
+    ef_attach_to = ['Scene']
+    
+    
+        
+    def toogle_atmosphere(self, context):
+        w = context.scene.indigo_atmosphere
+        if (w.atmosphere == True):
+            atmosphere_sphere = bpy.ops.object.empty_add(type='SPHERE', radius=200, view_align=True, location=(0.0, 0.0, 0.0), rotation=(0.0, 0.0, 0.0))
+            ac = context.active_object
+            ac.name = "Indigo Atmosphere"
+
+        
+    ef_attach_to = ['Scene']
+    controls = [
+        'atmosphere',
+        [ 'atmosphere_turbidity'],
+        [ 'atmosphere_posx', 'atmosphere_posy', 'atmosphere_posz', ],
+        ]
+    
+    visibility = {
+        'atmosphere_turbidity':   { 'atmosphere': True },
+        'atmosphere_posx':        { 'atmosphere': True },
+        'atmosphere_posy':        { 'atmosphere': True },
+        'atmosphere_posz':        { 'atmosphere': True },
+        }
+    
+    
+    properties = [
+                    {
+            'type': 'bool',
+            'attr': 'atmosphere',
+            'name': 'Enable Atmosphere',
+            'update': toogle_atmosphere,
+            'text': 'Add',
+            'icon': 'ZOOMIN',
+        },
+        {
+            'type': 'float',
+            'attr': 'atmosphere_turbidity',
+            'name': 'Turbidity',
+            'description': 'Turbidity',
+            'slider': True,
+            'default': 2.2,
+            'min': 1.0,
+            'max': 10.0
+        },
+        {
+            'type': 'string',
+            'attr': 'center',
+            'name': 'center'
+        },
+        {
+            'type': 'float',
+            'attr': 'atmosphere_posx',
+            'name': 'X:',
+            'description': 'Position X',
+            'default': 0,
+            'min': -9999999,
+            'max': 9999999
+        },
+        {
+            'type': 'float',
+            'attr': 'atmosphere_posy',
+            'name': 'Y:',
+            'description': 'Position Y',
+            'default': 0,
+            'precision':0,
+            'min': -9999999,
+            'max': 9999999
+        },
+        {
+            'type': 'float',
+            'attr': 'atmosphere_posz',
+            'name': 'Z',
+            'description': 'Position Z',
+            'default': 6538472,
+            'precision':0,
+            'min': -9999999,
+            'max': 9999999
+        },          
+        ]
+    
+    
+
+    
+  

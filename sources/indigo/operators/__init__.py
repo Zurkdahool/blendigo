@@ -43,6 +43,7 @@ from indigo.export import (
 from indigo.export.igmesh import igmesh_writer
 from indigo.export.geometry import model_object
 
+
 class _Impl_operator(object):
     
     def __init__(self, **kwargs):
@@ -676,3 +677,21 @@ class INDIGO_OT_medium_remove(bpy.types.Operator):
             w.medium.remove( self.properties.me_index )
         w.medium_index = len(w.medium)-1
         return {'FINISHED'}
+
+@IndigoAddon.addon_register_class
+class INDIGO_OT_atmosphere_toogle(bpy.types.Operator):
+    '''Toogle Indigo Athmosphere'''
+
+    bl_idname = "indigo.atmosphere_toogle"
+    bl_label = "Atmosphere"
+
+   # @classmethod
+   # def poll(self,context):
+   #     return True
+    
+    def execute(self,context):
+         bpy.ops.object.editmode_toggle()
+         return {'FINISHED'}
+    
+    
+        
