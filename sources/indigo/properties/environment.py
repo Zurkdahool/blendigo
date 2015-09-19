@@ -164,33 +164,68 @@ class indigo_atmosphere(declarative_property_group):
     
     ef_attach_to = ['Scene']
     
-    
-        
+  
     def toogle_atmosphere(self, context):
-        w = context.scene.indigo_atmosphere
-        if (w.atmosphere == True):
-            atmosphere_sphere = bpy.ops.object.empty_add(type='SPHERE', radius=200, view_align=True, location=(0.0, 0.0, 0.0), rotation=(0.0, 0.0, 0.0))
-            ac = context.active_object
-            ac.name = "Indigo Atmosphere"
+        
+        
+        # TODO: set back selected object and mode
+        if (context.mode == "EDIT_MESH"):
+            bpy.ops.object.editmode_toggle()
+        bpy.ops.object.select_all(action='DESELECT')
+        
+        atmosphere_group = 'IndigoAtmosphere'
+        atmosphere_name = 'Indigo Atmosphere'
+        
+        group = bpy.data.groups
+        
+        if (context.scene.indigo_atmosphere.atmosphere == True):  
+            if atmosphere_group in bpy.data.groups:
+                group_add = bpy.data.groups[atmosphere_group]
+            else:
+                group_add = bpy.data.groups.new(atmosphere_group)
+            
+            #if  group.find(atmosphere_group) == -1:
+            atmosphere_sphere = bpy.ops.object.empty_add(type='SPHERE', radius=200, view_align=True, location=(0.0, 0.0, 0.0), rotation=(0.0, 0.0, 0.0))    
+            obj = context.active_object
+            obj.name = atmosphere_name
+            if not obj.name in group_add.objects:
+                group_add.objects.link(obj)
+                
+            #bpy.ops.group.create(name=""+atmosphere_group) 
+            obj.hide_select=True
+            obj.select=False
+            
+        else:
+            for name,obj in group[atmosphere_group].objects.items():
+              # remove empty sphere
+              obj.hide_select=False
+              obj.select=True
+              bpy.ops.object.group_remove()
+              bpy.ops.object.delete()
 
+            
         
     ef_attach_to = ['Scene']
     controls = [
         'atmosphere',
         [ 'atmosphere_turbidity'],
+        'atmosphere_advanced',
         [ 'atmosphere_posx', 'atmosphere_posy', 'atmosphere_posz', ],
+        'atmosphere_reset'
         ]
     
     visibility = {
         'atmosphere_turbidity':   { 'atmosphere': True },
-        'atmosphere_posx':        { 'atmosphere': True },
-        'atmosphere_posy':        { 'atmosphere': True },
-        'atmosphere_posz':        { 'atmosphere': True },
+        'atmosphere_posx':        { 'atmosphere': True,'atmosphere_advanced': True },
+        'atmosphere_posy':        { 'atmosphere': True,'atmosphere_advanced': True },
+        'atmosphere_posz':        { 'atmosphere': True,'atmosphere_advanced': True },
+        'atmosphere_advanced':    { 'atmosphere': True },
+        'atmosphere_reset':        { 'atmosphere': True,'atmosphere_advanced': True },
         }
     
     
     properties = [
-                    {
+        {
             'type': 'bool',
             'attr': 'atmosphere',
             'name': 'Enable Atmosphere',
@@ -204,7 +239,7 @@ class indigo_atmosphere(declarative_property_group):
             'name': 'Turbidity',
             'description': 'Turbidity',
             'slider': True,
-            'default': 2.2,
+            'default': 2.0,
             'min': 1.0,
             'max': 10.0
         },
@@ -212,6 +247,12 @@ class indigo_atmosphere(declarative_property_group):
             'type': 'string',
             'attr': 'center',
             'name': 'center'
+        },
+        {
+            'type': 'bool',
+            'attr': 'atmosphere_advanced',
+            'name': 'Advanced Atmosphere',
+            'text': 'Advanced Atmosphere',
         },
         {
             'type': 'float',
@@ -237,11 +278,25 @@ class indigo_atmosphere(declarative_property_group):
             'attr': 'atmosphere_posz',
             'name': 'Z',
             'description': 'Position Z',
-            'default': 6538472,
+            'default': -6378135,
             'precision':0,
-            'min': -9999999,
-            'max': 9999999
-        },          
+            'min': -6458135,
+            'max': -6378135
+        },
+        {
+            'type': 'operator',
+            'attr': 'atmosphere_reset',
+            'name': 'Reset Atmosphere',
+            'operator': 'indigo.atmosphere_reset',
+            'text': 'Reset Atmosphere',
+            'icon': 'FILE_REFRESH',
+        },  
+        {
+            'type': 'string',
+            'attr': 'atmosphere_sphere_name',
+            'name': 'atmosphere_sphere_name',
+            'default': 'Indigo Atmosphere'
+        }        
         ]
     
     

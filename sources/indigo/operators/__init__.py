@@ -316,6 +316,19 @@ class _Impl_OT_indigo(_Impl_operator):
         self.scene_xml.append(ClayMaterial().build_xml_element(master_scene))
         self.scene_xml.append(NullMaterial().build_xml_element(master_scene))
     
+    
+    def export_atmosphere(self, master_scene):
+        
+        if master_scene.indigo_atmosphere.atmosphere:
+            from indigo.export.atmosphere import atmosphere_xml
+            
+            # 
+            # Add medium, add 'real' Sphere and SpecularMaterial
+            atmosphere_size = master_scene.indigo_atmosphere.atmosphere_posz
+            atmosphere_mesh = bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, size=abs(atmosphere_size), view_align=False, location=(0.0, 0.0, atmosphere_size ))
+            bpy.ops.mesh.primitive_plane_add()  
+            mplane = bpy.context.active_object  
+            
     scene_xml = None
     verbose = True
     
@@ -349,6 +362,10 @@ class _Impl_OT_indigo(_Impl_operator):
             #------------------------------------------------------------------------------
             # Materials - always export the default clay material and a null material
             self.export_default_materials(master_scene)
+            
+            #------------------------------------------------------------------------------
+            # Atmosphere 
+            self.export_atmosphere(master_scene)
             
             # Initialise values used for motion blur export.
             fps = master_scene.render.fps / master_scene.render.fps_base
@@ -521,6 +538,46 @@ class _Impl_OT_indigo(_Impl_operator):
             self.scene_xml.append(basic_medium)
             
             #------------------------------------------------------------------------------
+            # Export Atmosphere
+            if ex_scene.indigo_atmosphere.atmosphere:
+                from indigo.export.atmosphere import atmosphere_xml
+            
+            # 
+            # Add medium, add 'real' Sphere and SpecularMaterial
+                #earth_size = ex_scene.indigo_atmosphere.atmosphere_posz
+                #atmosphere_sphere = bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, size=earth_size, view_align=False, location=(0.0, 0.0, earth_size ))
+                #object = bpy.ops.object.add(type="MESH")
+                #scene.objects.link(object)
+                #obj = bpy.context.object
+                #print (obj.name)
+                
+                
+                #atmos = bpy.context.active_object
+                #atmos.name = 'test'
+                #obj = bpy.data.objects[atmos.name]
+                #mesh = obj.to_mesh(self.scene, True, 'RENDER')
+                #igmesh_writer.factory(bpy.context.scene, atmosphere_sphere, self.properties.filepath, mesh, debug=True)
+                #bpy.data.meshes.remove(mesh)
+                #atmosphere_sphere.flip_normals()
+            #for ex_scene in export_scenes:
+            #    if ex_scene is None: continue
+            #    
+            #    indigo_atmosphere = ex_scene.indigo_atmosphere
+            #    atmosphere = indigo_atmosphere
+            #    
+            #    if len(indigo_material_medium.medium.items()) == 0 : continue
+            #    
+            #    for medium_name, medium_data in medium.items():
+            #        
+            #        medium_index = ex_scene.indigo_material_medium.medium.find(medium_name) # more precise if same name
+            #        
+            #        indigo_log('Exporting medium: %s ' % (medium_name))
+            #        self.scene_xml.append(
+            #            medium_xml(ex_scene, medium_name, medium_index, medium_data).build_xml_element(ex_scene, medium_name, medium_data)
+            #        )
+                indigo_log('Exporting Atmosphere:')
+                   
+            #------------------------------------------------------------------------------
             # Export used materials.
             if self.verbose: indigo_log('Exporting used materials')
             material_count = 0
@@ -679,18 +736,24 @@ class INDIGO_OT_medium_remove(bpy.types.Operator):
         return {'FINISHED'}
 
 @IndigoAddon.addon_register_class
-class INDIGO_OT_atmosphere_toogle(bpy.types.Operator):
-    '''Toogle Indigo Athmosphere'''
+class INDIGO_OT_atmosphere_reset(bpy.types.Operator):
+    '''Reset Atmosphere'''
 
-    bl_idname = "indigo.atmosphere_toogle"
-    bl_label = "Atmosphere"
+    bl_idname = "indigo.atmosphere_reset"
+    bl_label = "Reset Atmosphere"
 
-   # @classmethod
-   # def poll(self,context):
-   #     return True
+    #@classmethod
+    #def poll(self):
+    #    return True
     
-    def execute(self,context):
-         bpy.ops.object.editmode_toggle()
+    def invoke(self,context, event):
+         # reset to earth
+         cs = context.scene.indigo_atmosphere
+         cs.atmosphere_posz= -6378135
+         cs.atmosphere_posy= 0
+         cs.atmosphere_posx= 0
+         cs.turbidity=2.0
+                 
          return {'FINISHED'}
     
     

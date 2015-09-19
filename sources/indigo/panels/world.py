@@ -73,7 +73,7 @@ class indigo_ui_lightlayers(world_panel):
 @IndigoAddon.addon_register_class
 class indigo_ui_atmosphere(world_panel):
    bl_label = 'Atmosphere'
-
+   
    display_property_groups = [
         ( ('scene',), 'indigo_atmosphere' )
     ]

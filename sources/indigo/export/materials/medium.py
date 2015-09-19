@@ -101,11 +101,6 @@ class medium_xml(xml_builder):
                 'melanin_fraction': [self.medium_data.medium_melanin],
                 'melanin_type_blend': [self.medium_data.medium_eumelanin],
             }
-        elif self.medium_data.medium_type == 'atmosphere':
-            fmt[self.medium_data.medium_type] = {
-                'turbidity': [self.medium_data.medium_turbidity],
-                'center': [ str(self.medium_data.medium_posx) + ' ' + str(self.medium_data.medium_posy) + ' ' + str(self.medium_data.medium_posz)],
-            }
         return fmt
 
 
