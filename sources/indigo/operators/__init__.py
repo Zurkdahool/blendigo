@@ -326,8 +326,8 @@ class _Impl_OT_indigo(_Impl_operator):
             # Add medium, add 'real' Sphere and SpecularMaterial
             atmosphere_size = master_scene.indigo_atmosphere.atmosphere_posz
             atmosphere_mesh = bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, size=abs(atmosphere_size), view_align=False, location=(0.0, 0.0, atmosphere_size ))
-            bpy.ops.mesh.primitive_plane_add()  
-            mplane = bpy.context.active_object  
+            #bpy.ops.mesh.primitive_plane_add()  
+            #mplane = bpy.context.active_object  
             
     scene_xml = None
     verbose = True
