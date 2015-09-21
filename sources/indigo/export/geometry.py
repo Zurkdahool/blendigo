@@ -355,7 +355,7 @@ class GeometryExporter(SceneIterator):
         for ms in obj.material_slots:
             if ms.material != None:
                 hash.update(ms.material.name.encode(encoding='UTF-8'))
-
+               
         ### Hash Vertex coords ###
         vertices = []
         for v in mesh.vertices:

@@ -59,6 +59,8 @@ import indigo.panels.world
 
 # Exporter Operators need to be imported to ensure initialisation
 import indigo.operators
+import indigo.operators.indigodb
+import indigo.operators.indigodb_lib
 
 from indigo.core.util import getVersion, getGuiPath, getConsolePath, getInstallPath, count_contiguous
 
