@@ -60,12 +60,20 @@ class xml_builder(object):
     
     Element = ET.Element
     SubElement = ET.SubElement
+    uid = 1 
     
+    def build_uid(self,xml):
+            uid = self.SubElement(xml,'uid')
+            uid.text = str(xml_builder.uid)
+            xml_builder.uid +=  1
+            return xml_builder.uid
+        
     def build_subelements(self, context, d, elem):
         """Parse the values in the format dict d and collect the
         formatted data into XML structure starting elem
         
         """
+                                              
         for key in d.keys():
             # tuple and xml_multichild provides multiple child elements
             if type(d[key]) in (tuple, xml_multichild):
@@ -179,7 +187,8 @@ class SceneIterator(object):
     
     def iterateScene(self, scene):
         self.scene = scene
-    
+        
+        
         for obj in self.scene.objects:
             if self.canAbort(): break
             if OBJECT_ANALYSIS: indigo_log('Analysing object %s : %s' % (obj, obj.type))
@@ -227,5 +236,6 @@ class SceneIterator(object):
                 elif obj.type in ('MESH', 'CURVE', 'SURFACE', 'FONT'):
                     self.handleMesh(obj)
             
+                
             except UnexportableObjectException as err:
                 if OBJECT_ANALYSIS: indigo_log(' -> Unexportable object: %s : %s : %s' % (obj, obj.type, err))

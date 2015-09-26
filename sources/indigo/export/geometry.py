@@ -77,7 +77,7 @@ class model_base(xml_builder):
         xml = self.Element(self.element_type)
 
         xml_format = self.get_format(obj, mesh_name, matrix_list)
-
+        self.build_uid(xml)
         self.build_subelements(obj, xml_format, xml)
 
         return xml
@@ -148,6 +148,7 @@ class SectionPlane(xml_builder):
 
     def build_xml_element(self):
         xml = self.Element('section_plane')
+        self.build_uid(xml)
         self.build_subelements(
             self,
             {
@@ -198,6 +199,7 @@ class SpherePrimitive(xml_builder):
         #print("scale: " + str(scale))
 
         xml = self.Element('sphere')
+        self.build_uid(xml)
         self.build_subelements(
             self,
             {
@@ -217,6 +219,7 @@ class GeometryExporter(SceneIterator):
     ExportedDuplis = None
     ExportedLamps = None
     ExportedMeshes = None
+    ExportedMediums = None
     MeshesOnDisk = None
     
     mesh_uses_shading_normals = None
@@ -240,6 +243,7 @@ class GeometryExporter(SceneIterator):
         self.ExportedDuplis = {}
         self.ExportedLamps = {}
         self.ExportedMeshes = {}
+        self.ExportedMediums = {}
         self.MeshesOnDisk = {}
         
         self.mesh_uses_shading_normals = {} # Map from exported_mesh_name to boolean

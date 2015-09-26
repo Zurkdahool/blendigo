@@ -34,6 +34,7 @@ class ClayMaterial(xml_builder):
     
     def build_xml_element(self, context):
         xml = self.Element('material')
+        
         self.build_subelements(
             context,
             {
@@ -55,12 +56,14 @@ class NullMaterial(xml_builder):
     
     def build_xml_element(self, context):
         xml = self.Element('material')
+        
         self.build_subelements(
             context,
             {
                 'name': ['blendigo_null'],
-                'null_material': {}
+                'null_material': {},
             },
             xml
         )
+        self.build_uid(xml)
         return xml

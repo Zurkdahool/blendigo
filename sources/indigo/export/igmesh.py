@@ -27,7 +27,7 @@
 import bpy            #@UnresolvedImport
 
 from indigo.export import UnexportableObjectException
-from indigo.export._igmesh import igmesh, igmesh_stream
+#from indigo.export._igmesh import igmesh, igmesh_stream
 from indigo.export import ( indigo_log )
 import time
 import array

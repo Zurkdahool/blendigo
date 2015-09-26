@@ -123,6 +123,7 @@ class indigo_lamp_sun(declarative_property_group, xml_builder):
             'name': [obj.name],
             'sunsky': self.get_format(obj, scene)
         }
+        self.build_uid(xml)
         self.build_subelements(obj, xml_format, xml)
         return xml
     

@@ -31,9 +31,10 @@ from indigo.export.materials.spectra    import rgb, uniform
 class medium_xml(xml_builder):
     
      def build_xml_element(self, scene,medium_name, medium_data ):
-        xml = self.Element('medium')
+        xml = self.Element('medium')     
+        uid = self.build_uid(xml)
         self.build_subelements(scene, self.get_format(), xml)
-        return xml
+        return (uid,xml) 
     
      def __init__(self, scene,medium_name, medium_index, medium_data):
         self.medium_name = medium_name
@@ -46,7 +47,9 @@ class medium_xml(xml_builder):
         fmt = {
             'name': [self.medium_name + '_medium']}
         if self.medium_index != -1:
-                fmt.update( {'uid': [self.medium_index + 10 ],})  # indigo uid starts at 10
+                pass
+            
+                # fmt.update( {'uid': [self.medium_index + 10 ],})  # indigo uid starts at 10
         fmt.update( {'precedence': [self.medium_data.precedence],
             self.medium_data.medium_type: {}
         })

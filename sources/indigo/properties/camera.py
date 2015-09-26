@@ -400,6 +400,7 @@ class indigo_camera(declarative_property_group, xml_builder):
                 sy /= aspect
             xml_format['lens_shift_up_distance'] = [sy]
         
+        self.build_uid(xml)
         self.build_subelements(scene, xml_format, xml)
         
         return xml

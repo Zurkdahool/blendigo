@@ -222,7 +222,8 @@ class indigo_tonemapping(declarative_property_group, xml_builder):
     
     def build_xml_element(self, scene):
         xml = self.Element('tonemapping')
-        
+        uid = self.build_uid(xml)
+        print ("---->tone",uid)
         # format needs to be entirely generated at export time
         if self.tonemap_type == 'reinhard':
             xml_format = {

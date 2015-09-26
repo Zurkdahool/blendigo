@@ -128,7 +128,7 @@ class LightingChecker(SceneIterator):
         self.LampsChecked = ExportCache("Lamps")
         self.MaterialsChecked = ExportCache("Materials")
         self.CheckedDuplis = ExportCache("Duplis")
-    
+                
     def isValid(self):
         return self.valid_lighting
     
@@ -302,13 +302,14 @@ class _Impl_OT_indigo(_Impl_operator):
             
             self.scene_xml.append(background_settings)
             
-    # Exports default null and clay materials.
     def export_tonemapping(self, master_scene):
         if self.verbose: indigo_log('Exporting tonemapping')
+        
         self.scene_xml.append(
             master_scene.camera.data.indigo_tonemapping.build_xml_element(master_scene)
         )
-            
+        
+        
     # Exports default null and clay materials.
     def export_default_materials(self, master_scene):
         from indigo.export.materials.Clay import ClayMaterial, NullMaterial
@@ -468,6 +469,7 @@ class _Impl_OT_indigo(_Impl_operator):
                         'weight': {'constant': [1]}
                     })
                 scene_background_settings_obj = xml_builder()
+                scene_background_settings_obj.build_uid()
                 scene_background_settings_obj.build_subelements(None, scene_background_settings_fmt, scene_background_settings)
                 self.scene_xml.append(scene_background_settings)
             
@@ -485,16 +487,14 @@ class _Impl_OT_indigo(_Impl_operator):
                 if len(medium.items()) < 0 : continue
                 
                 for medium_index, medium_data in enumerate(medium):
-                    medium_name = medium_data.name
+                    medium_name = medium_data.name + str(xml_builder.uid)
                     indigo_log('Exporting medium: %s ' % (medium_name))
-                    self.scene_xml.append(
-                        medium_xml(ex_scene, medium_name, medium_index, medium_data).build_xml_element(ex_scene, medium_name, medium_data)
-                    )
-
+                    (medium_uid,medium) = medium_xml(ex_scene, medium_name, medium_index, medium_data).build_xml_element(ex_scene, medium_name, medium_data)
+                    self.scene_xml.append(medium)
+                    
             basic_medium = ET.fromstring("""
                                 <medium>
-                                   <uid>"""+str(len(medium)+10)+"""</uid>
-		                             <name>Basic medium</name>
+		                             <name>Basic_medium</name>
 			                           <precedence>10</precedence>
 			                             <basic>
 				                           <ior>1.5</ior>
@@ -510,7 +510,11 @@ class _Impl_OT_indigo(_Impl_operator):
 			                             </basic>
 	                            </medium>   
                          """) 
+            
+            add_basic = xml_builder()
+            add_basic.build_uid(basic_medium)
             self.scene_xml.append(basic_medium)
+            
 
             #------------------------------------------------------------------------------
             # Export used materials.
@@ -584,6 +588,9 @@ class _Impl_OT_indigo(_Impl_operator):
             # Reset to start_frame.
             if len(frame_list) > 1:
                 bpy.context.scene.frame_set(start_frame)
+            
+            # reset uid
+            xml_builder.uid = 0
             
             return {'FINISHED'}
         

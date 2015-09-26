@@ -37,9 +37,12 @@ class MaterialBase(xml_builder):
     
     scene = None
     
+    
     def build_xml_element(self, context, scene=None):
         if scene: self.scene = scene
         xml = self.Element('material')
+              
+        self.build_uid(xml)
         self.build_subelements(context, self.get_format(), xml)
         return xml
     

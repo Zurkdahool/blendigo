@@ -55,12 +55,14 @@ class SpecularMaterial(
             medium_index = len(medium) 
         else:
             medium_name = medium_name + '_medium'
+        
+        
             
         fmt = {
             'name': [self.material_name],
             'backface_emit': [str(self.material_group.indigo_material_emission.backface_emit).lower()],
             element_name: {
-                'internal_medium_uid': [ medium_index + 10 ] # seems indigo medium uid starts at 10...
+                'internal_medium_uid': [ medium_index ] 
             }
         }
         

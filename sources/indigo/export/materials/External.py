@@ -34,6 +34,7 @@ class ExternalMaterial(MaterialBase):
     
     def build_xml_element(self, context):
         xml = self.Element('include')
+        self.build_uid(xml)
         self.build_subelements(context, self.format, xml)
         return xml
     

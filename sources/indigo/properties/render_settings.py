@@ -623,16 +623,27 @@ class indigo_engine(declarative_property_group, indigo.export.xml_builder):
 
     def build_xml_element(self, scene):
         xml = self.Element('scene')
+                
+        # insert uid into renderer_settings
+        rs = self.Element('renderer_settings')
+        rs_uid = self.build_uid(rs)
+         
+        # insert uid into renderer_settings
+        mtd = self.Element('metadata')
+        mtd_uid = self.build_uid(rs)
+        
         xres = scene.render.resolution_x * scene.render.resolution_percentage // 100
         yres = scene.render.resolution_y * scene.render.resolution_percentage // 100
         xml_format = {
             'metadata' : {
+                'uid': [mtd_uid],
                 'created_date':    [time.strftime('%Y-%m-%d %H:%M:%S GMT', time.gmtime())],
                 'exporter':        ['Blendigo ' + '.'.join(['%i'%v for v in bl_info['version']])],
                 'platform':        ['%s - %s - Python %s' % (PlatformInformation.platform_id, PlatformInformation.uname, PlatformInformation.python)],
                 'author':        [PlatformInformation.user],
             },
             'renderer_settings': {
+                'uid': [rs_uid],
                 'width':  [xres],
                 'height': [yres],
                 'bih_tri_threshold': 'bih_tri_threshold',
@@ -662,7 +673,7 @@ class indigo_engine(declarative_property_group, indigo.export.xml_builder):
                 'gpu': 'gpu'
             },
         }
-
+  
         # Auto threads setting
         xml_format['renderer_settings']['auto_choose_num_threads'] = 'threads_auto'
         if not self.threads_auto:
@@ -706,7 +717,7 @@ class indigo_engine(declarative_property_group, indigo.export.xml_builder):
                 'y1': [y1],
                 'y2': [y2]
             }
-
+        
         self.build_subelements(scene, xml_format, xml)
-
+        
         return xml
