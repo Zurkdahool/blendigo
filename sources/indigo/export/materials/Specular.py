@@ -29,7 +29,7 @@ import bpy
 from indigo.export import xml_builder
 from indigo.export.materials.Base        import EmissionChannelMaterial, BumpChannelMaterial, NormalChannelMaterial, DisplacementChannelMaterial, ExponentChannelMaterial, AbsorptionLayerChannelMaterial, MaterialBase
 from indigo.export.materials.spectra    import rgb, uniform
-
+import xml.etree.cElementTree as ET
 
 
 class SpecularMaterial(
@@ -50,19 +50,20 @@ class SpecularMaterial(
         medium = bpy.context.scene.indigo_material_medium.medium
         
         medium_index = medium.find(medium_name)
-        
+        print (medium[medium_index].name)
+
         if (len(medium_name) == 0) or  (medium_index == -1):
+            medium_name = "Basic_medium"
             medium_index = len(medium) 
         else:
-            medium_name = medium_name + '_medium'
-        
-        
+            medium_name = medium_name 
+             
             
         fmt = {
             'name': [self.material_name],
             'backface_emit': [str(self.material_group.indigo_material_emission.backface_emit).lower()],
             element_name: {
-                'internal_medium_uid': [ medium_index ] 
+                'internal_medium_name': [ medium_name ] 
             }
         }
         

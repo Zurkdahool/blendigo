@@ -47,6 +47,7 @@ class ClayMaterial(xml_builder):
             },
             xml
         )
+        self.build_uid(xml)
         return xml
 
 class NullMaterial(xml_builder):

@@ -62,6 +62,10 @@ class xml_builder(object):
     SubElement = ET.SubElement
     uid = 1 
     
+
+    def ___init__(self):
+            self.uid = xml_builder.uid
+
     def build_uid(self,xml):
             uid = self.SubElement(xml,'uid')
             uid.text = str(xml_builder.uid)
@@ -73,7 +77,6 @@ class xml_builder(object):
         formatted data into XML structure starting elem
         
         """
-                                              
         for key in d.keys():
             # tuple and xml_multichild provides multiple child elements
             if type(d[key]) in (tuple, xml_multichild):
